@@ -13,7 +13,7 @@ export default async function InspectionPage({
   const session = await getServerSession(authOptions);
   if (!session?.user?.email) redirect('/');
 
-  // ?��? ?�션 로드 (?�유�??�인)
+  // ?먭? ?몄뀡 濡쒕뱶 (?뚯쑀沅??뺤씤)
   const docRef = db.collection('inspections').doc(params.id);
   const doc    = await docRef.get();
 
@@ -28,10 +28,10 @@ export default async function InspectionPage({
     status:         data.status,
   };
 
-  // 22�??�션 + 325�???��?� ?�적 마스???�이?�에??직접 ?�용 (DB 조회 불필??
+  // 22媛??뱀뀡 + 325媛???ぉ? ?뺤쟻 留덉뒪???곗씠?곗뿉??吏곸젒 ?ъ슜 (DB 議고쉶 遺덊븘??
   const sections = MASTER_SECTIONS;
 
-  // 기존 ?��? 결과 로드 (Firestore ?�브컬렉??
+  // 湲곗〈 ?먭? 寃곌낵 濡쒕뱶 (Firestore ?쒕툕而щ젆??
   const resultsSnap = await docRef.collection('results').get();
   const results = resultsSnap.docs.map((r) => {
     const d = r.data();

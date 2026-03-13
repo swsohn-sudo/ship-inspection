@@ -4,7 +4,7 @@ import { db } from '@/lib/firebase';
 import { FieldValue } from 'firebase-admin/firestore';
 import { NextRequest } from 'next/server';
 
-// GET /api/inspections ??로그???�용?�의 ?��? 목록 (최근 30�?
+// GET /api/inspections ??嚥≪뮄???????癒?벥 ?癒? 筌뤴뫖以?(筌ㅼ뮄??30椰?
 export async function GET() {
   const session = await getServerSession(authOptions);
   if (!session?.user?.email)
@@ -26,7 +26,7 @@ export async function GET() {
       inspector:      data.inspector,
       status:         data.status,
       createdAt:      data.createdAt?.toDate().toISOString() ?? null,
-      // ?�?�보???�환: NC 개수�?기존 _count.results ?�식?�로 반환
+      // ????뺣궖???紐낆넎: NC 揶쏆뮇?붺몴?疫꿸퀣??_count.results ?類ㅻ뻼??곗쨮 獄쏆꼹??
       _count: { results: data.ncCount ?? 0 },
     };
   });
@@ -34,7 +34,7 @@ export async function GET() {
   return Response.json(inspections);
 }
 
-// POST /api/inspections ?????��? ?�성
+// POST /api/inspections ?????癒? ??밴쉐
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.email)
@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
 
   const ref = await db.collection('inspections').add({
     shipName:       shipName.trim(),
-    inspectionDate, // YYYY-MM-DD 문자??그�?�??�??
+    inspectionDate, // YYYY-MM-DD ?얜챷???域밸챶?嚥?????
     inspector:      inspector.trim(),
     status:         'IN_PROGRESS',
     userEmail:      session.user.email,

@@ -3,7 +3,7 @@ import { authOptions } from '@/lib/auth';
 import { db } from '@/lib/firebase';
 import { FieldValue } from 'firebase-admin/firestore';
 
-// GET /api/inspections/[id] ???��? ?�세 + 결과 목록
+// GET /api/inspections/[id] ???먭? ?곸꽭 + 寃곌낵 紐⑸줉
 export async function GET(
   _req: Request,
   { params }: { params: { id: string } }
@@ -24,7 +24,7 @@ export async function GET(
   return Response.json({ id: doc.id, ...doc.data(), results });
 }
 
-// PATCH /api/inspections/[id] ???�태 ?�데?�트 (status ?�드�??�용)
+// PATCH /api/inspections/[id] ???곹깭 ?낅뜲?댄듃 (status ?꾨뱶留??덉슜)
 export async function PATCH(
   req: Request,
   { params }: { params: { id: string } }
