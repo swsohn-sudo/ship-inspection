@@ -1,11 +1,23 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="96" fill="#1e3a5f"/>
-  <g stroke="white" stroke-linecap="round" stroke-linejoin="round" fill="none">
-    <circle cx="256" cy="136" r="42" stroke-width="26"/>
-    <circle cx="256" cy="136" r="16" fill="white" stroke="none"/>
-    <line x1="256" y1="178" x2="256" y2="388" stroke-width="28"/>
-    <line x1="156" y1="226" x2="356" y2="226" stroke-width="28"/>
-    <path d="M 156 388 C 116 388 96 354 124 330" stroke-width="28"/>
-    <path d="M 356 388 C 396 388 416 354 388 330" stroke-width="28"/>
-  </g>
+  <rect width="512" height="512" rx="80" fill="#1a2f4a"/>
+  <!-- 선체 -->
+  <rect x="64" y="290" width="380" height="76" rx="10" fill="white"/>
+  <!-- 선수 (우측 경사) -->
+  <polygon points="444,290 400,366 444,366" fill="#1a2f4a"/>
+  <!-- 선미 (좌측) -->
+  <rect x="64" y="290" width="20" height="76" rx="4" fill="#1a2f4a"/>
+  <!-- 컨테이너 3개 -->
+  <rect x="100" y="214" width="88" height="76" rx="8" fill="white" opacity="0.9"/>
+  <rect x="204" y="214" width="88" height="76" rx="8" fill="white" opacity="0.9"/>
+  <rect x="308" y="214" width="88" height="76" rx="8" fill="white" opacity="0.9"/>
+  <!-- 컨테이너 라인 -->
+  <line x1="100" y1="252" x2="188" y2="252" stroke="#1a2f4a" stroke-width="4"/>
+  <line x1="204" y1="252" x2="292" y2="252" stroke="#1a2f4a" stroke-width="4"/>
+  <line x1="308" y1="252" x2="396" y2="252" stroke="#1a2f4a" stroke-width="4"/>
+  <!-- 상부 구조물 (브릿지) -->
+  <rect x="110" y="150" width="100" height="64" rx="8" fill="white" opacity="0.7"/>
+  <!-- 굴뚝 -->
+  <rect x="148" y="110" width="28" height="50" rx="6" fill="white" opacity="0.6"/>
+  <!-- 파도 -->
+  <path d="M64 366 Q120 390 180 366 Q240 342 300 366 Q360 390 444 366" stroke="white" stroke-width="6" fill="none" opacity="0.4"/>
 </svg>
