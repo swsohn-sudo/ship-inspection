@@ -21,6 +21,6 @@ export async function buildPdfBlob(
   const element = React.createElement(PdfReport, { inspection, deficiencies });
 
   // @react-pdf/renderer → PDF Blob
-  const blob = await pdf(element).toBlob();
+  const blob = await pdf(element as any).toBlob();
   return blob;
 }
