@@ -1,7 +1,7 @@
 {
-  "name": "SQT Official Document Reply App",
-  "short_name": "SQT Inspection",
-  "description": "Ship inspection photo upload & automated report generation",
+  "name": "Ship Safety Inspection",
+  "short_name": "Safety Inspection",
+  "description": "Ship safety inspection checklist & deficiency report"
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
