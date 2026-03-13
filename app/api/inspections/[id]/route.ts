@@ -49,3 +49,29 @@ export async function PATCH(
 
   return Response.json({ ok: true });
 }
+// DELETE /api/inspections/[id] 점검표 삭제
+export async function DELETE(
+  _req: Request,
+  { params }: { params: { id: string } }
+) {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.email)
+    return Response.json({ error: 'Unauthorized' }, { status: 401 });
+
+  const docRef = db.collection('inspections').doc(params.id);
+  const doc = await docRef.get();
+
+  if (!doc.exists || doc.data()?.userEmail !== session.user.email)
+    return Response.json({ error: 'Not found' }, { status: 404 });
+
+  // 하위 컬렉션(results) 먼저 삭제
+  const resultsSnap = await docRef.collection('results').get();
+  const batch = db.batch();
+  resultsSnap.docs.forEach((r) => batch.delete(r.ref));
+  await batch.commit();
+
+  // 본 문서 삭제
+  await docRef.delete();
+
+  return Response.json({ ok: true });
+}

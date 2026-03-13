@@ -11,6 +11,7 @@ import {
   Loader2,
   LogOut,
   AlertCircle,
+  Trash2,
 } from 'lucide-react';
 import { signOut } from 'next-auth/react';
 
@@ -70,6 +71,49 @@ function LoginScreen() {
 }
 
 // ─────────────────────────────────────────────────────────────
+// 삭제 확인 다이얼로그
+// ─────────────────────────────────────────────────────────────
+function DeleteDialog({
+  shipName,
+  onConfirm,
+  onCancel,
+}: {
+  shipName: string;
+  onConfirm: () => void;
+  onCancel: () => void;
+}) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-6">
+      <div className="bg-white rounded-2xl p-6 w-full max-w-sm shadow-xl">
+        <div className="flex items-center gap-3 mb-3">
+          <div className="w-10 h-10 rounded-xl bg-red-100 flex items-center justify-center shrink-0">
+            <Trash2 className="w-5 h-5 text-red-600" />
+          </div>
+          <p className="font-bold text-slate-800 text-base">정말 삭제하시겠습니까?</p>
+        </div>
+        <p className="text-sm text-slate-500 mb-6">
+          <span className="font-semibold text-slate-700">{shipName}</span> 점검표가 영구적으로 삭제됩니다. 이 작업은 되돌릴 수 없습니다.
+        </p>
+        <div className="flex gap-3">
+          <button
+            onClick={onCancel}
+            className="flex-1 py-3 rounded-xl border border-slate-200 text-sm font-semibold text-slate-600 active:scale-95 transition-all"
+          >
+            취소
+          </button>
+          <button
+            onClick={onConfirm}
+            className="flex-1 py-3 rounded-xl bg-red-600 text-sm font-semibold text-white active:scale-95 transition-all"
+          >
+            OK
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
 // 대시보드 (메인)
 // ─────────────────────────────────────────────────────────────
 export default function HomePage() {
@@ -77,6 +121,8 @@ export default function HomePage() {
   const [inspections, setInspections] = useState<Inspection[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<Inspection | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     if (status !== 'authenticated') {
@@ -95,6 +141,20 @@ export default function HomePage() {
       });
   }, [status]);
 
+  async function handleDelete() {
+    if (!deleteTarget) return;
+    setDeleting(true);
+    try {
+      await fetch(`/api/inspections/${deleteTarget.id}`, { method: 'DELETE' });
+      setInspections((prev) => prev.filter((i) => i.id !== deleteTarget.id));
+    } catch {
+      setError('Failed to delete inspection');
+    } finally {
+      setDeleting(false);
+      setDeleteTarget(null);
+    }
+  }
+
   // 세션 로딩
   if (status === 'loading') {
     return (
@@ -110,6 +170,15 @@ export default function HomePage() {
   // 대시보드
   return (
     <div className="min-h-screen bg-slate-100">
+      {/* 삭제 확인 다이얼로그 */}
+      {deleteTarget && (
+        <DeleteDialog
+          shipName={deleteTarget.shipName}
+          onConfirm={handleDelete}
+          onCancel={() => setDeleteTarget(null)}
+        />
+      )}
+
       {/* 헤더 */}
       <header
         className="sticky top-0 z-20 shadow-md px-4 py-4"
@@ -187,53 +256,67 @@ export default function HomePage() {
               Recent Inspections
             </p>
             {inspections.map((insp) => (
-              <Link
-                key={insp.id}
-                href={`/inspections/${insp.id}`}
-                className="bg-white rounded-2xl px-4 py-4 flex items-center gap-3 shadow-sm border border-slate-100 active:scale-[0.98] transition-all"
-              >
-                <div
-                  className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
-                  style={{ backgroundColor: '#1e3a5f18' }}
+              <div key={insp.id} className="relative">
+                <Link
+                  href={`/inspections/${insp.id}`}
+                  className="bg-white rounded-2xl px-4 py-4 flex items-center gap-3 shadow-sm border border-slate-100 active:scale-[0.98] transition-all pr-14"
                 >
-                  <Ship className="w-5 h-5" style={{ color: '#1e3a5f' }} />
-                </div>
-
-                <div className="flex-1 min-w-0">
-                  <p className="font-bold text-slate-800 text-sm truncate">
-                    {insp.shipName}
-                  </p>
-                  <div className="flex items-center gap-2 mt-0.5 flex-wrap">
-                    <span className="text-xs text-slate-400">
-                      {new Date(insp.inspectionDate).toLocaleDateString('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                        year: 'numeric',
-                      })}
-                    </span>
-                    <span className="text-xs text-slate-400">·</span>
-                    <span className="text-xs text-slate-400">{insp.inspector}</span>
-                    {insp._count.results > 0 && (
-                      <span className="text-xs bg-red-100 text-red-600 font-bold px-1.5 py-0.5 rounded-full">
-                        {insp._count.results} NC
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                <div className="shrink-0 flex flex-col items-end gap-1">
-                  <span
-                    className={`text-xs font-semibold px-2 py-0.5 rounded-full ${
-                      insp.status === 'COMPLETED'
-                        ? 'bg-emerald-100 text-emerald-700'
-                        : 'bg-amber-100 text-amber-700'
-                    }`}
+                  <div
+                    className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+                    style={{ backgroundColor: '#1e3a5f18' }}
                   >
-                    {insp.status === 'COMPLETED' ? 'Done' : 'In Progress'}
-                  </span>
-                  <ChevronRight className="w-4 h-4 text-slate-300" />
-                </div>
-              </Link>
+                    <Ship className="w-5 h-5" style={{ color: '#1e3a5f' }} />
+                  </div>
+
+                  <div className="flex-1 min-w-0">
+                    <p className="font-bold text-slate-800 text-sm truncate">
+                      {insp.shipName}
+                    </p>
+                    <div className="flex items-center gap-2 mt-0.5 flex-wrap">
+                      <span className="text-xs text-slate-400">
+                        {new Date(insp.inspectionDate).toLocaleDateString('en-US', {
+                          month: 'short',
+                          day: 'numeric',
+                          year: 'numeric',
+                        })}
+                      </span>
+                      <span className="text-xs text-slate-400">·</span>
+                      <span className="text-xs text-slate-400">{insp.inspector}</span>
+                      {insp._count.results > 0 && (
+                        <span className="text-xs bg-red-100 text-red-600 font-bold px-1.5 py-0.5 rounded-full">
+                          {insp._count.results} NC
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="shrink-0 flex flex-col items-end gap-1">
+                    <span
+                      className={`text-xs font-semibold px-2 py-0.5 rounded-full ${
+                        insp.status === 'COMPLETED'
+                          ? 'bg-emerald-100 text-emerald-700'
+                          : 'bg-amber-100 text-amber-700'
+                      }`}
+                    >
+                      {insp.status === 'COMPLETED' ? 'Done' : 'In Progress'}
+                    </span>
+                    <ChevronRight className="w-4 h-4 text-slate-300" />
+                  </div>
+                </Link>
+
+                {/* 삭제 버튼 */}
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setDeleteTarget(insp);
+                  }}
+                  disabled={deleting}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-xl bg-red-50 flex items-center justify-center active:scale-95 transition-all"
+                  title="Delete"
+                >
+                  <Trash2 className="w-4 h-4 text-red-400" />
+                </button>
+              </div>
             ))}
           </div>
         )}
