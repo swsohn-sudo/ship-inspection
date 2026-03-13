@@ -1,0 +1,64 @@
+[
+  {
+    "id": "gyro",
+    "no": 1,
+    "titleKo": "GYRO COMPASS MAIN UNIT과 REPEATER HEADING 일치 여부",
+    "titleEn": "Verify synchronized compass heading between main unit and repeaters",
+    "slots": ["MAIN UNIT", "S/G RM", "PORT W/BRIDGE", "STBD W/BRIDGE"],
+    "guideline": "S/G RM) If the Gyro compass unit is digital, take a photo of the digital readings"
+  },
+  {
+    "id": "magnetic",
+    "no": 2,
+    "titleKo": "MAGNETIC COMPASS 조명 상태 및 기포 발생 여부 점검",
+    "titleEn": "Verify magnetic compass for proper illumination and absence of air bubbles",
+    "slots": ["MAGNETIC COMPASS", "AC/DC LIGHT"]
+  },
+  {
+    "id": "sart-epirb",
+    "no": 3,
+    "titleKo": "SART/EPIRB TEST 결과 확인 및 담당자 조작 방법 숙지 상태 점검",
+    "titleEn": "Verify SART/EPIRB test results and ensure responsible officer's familiarity with test procedures",
+    "slots": ["SART", "EPIRB"],
+    "guideline": "SART) 12 circles are drawn centered on the vessel while at berth, but represented by 12 dots while underway. / EPIRB) If photographing the test mode is difficult due to brief illumination, take a photo of the actual test being performed."
+  },
+  {
+    "id": "radar",
+    "no": 4,
+    "titleKo": "RADAR PM TEST 시행 결과 및 담당자 조작 방법 숙달 상태 점검",
+    "titleEn": "Verify RADAR PM test results and ensure responsible officer's familiarity with test procedures",
+    "slots": ["X-BAND", "S-BAND"],
+    "guideline": "Radar) For Solid State Radars, patterns such as arcs do not appear during PM tests. Only data values are displayed."
+  },
+  {
+    "id": "mfhf",
+    "no": 5,
+    "titleKo": "MF/HF DSC TEST 시행 결과 확인 및 담당자 조작 방법 숙달 상태 점검",
+    "titleEn": "Verify MF/HF DSC test results and ensure responsible officer's familiarity with test procedures",
+    "slots": ["DSC TEST RESULT", "BATTERY VOLTAGE"],
+    "guideline": "DSC Test) Conduct tests with coast stations rather than ship stations whenever possible."
+  },
+  {
+    "id": "bnwas",
+    "no": 6,
+    "titleKo": "BNWAS 단계별 ALARM 작동 및 비상호출장치 상태 점검",
+    "titleEn": "Verify operational status of BNWAS sequential alarms and emergency call functions",
+    "slots": ["VISUAL ALARM", "AUDIBLE ALARM"],
+    "guideline": "BNWAS) Although audible alarms cannot be evidenced by photos, it is recommended to actually test stages 1, 2 and 3."
+  },
+  {
+    "id": "gmdss",
+    "no": 7,
+    "titleKo": "GMDSS CONSOLE 및 선교 비상등 작동 상태 점검",
+    "titleEn": "Verify operational status of GMDSS console and bridge emergency lights",
+    "slots": ["GMDSS CONSOLE", "BRIDGE EM'CY LIGHT"]
+  },
+  {
+    "id": "vdr",
+    "no": 8,
+    "titleKo": "VDR 정상 작동 상태 및 담당자 PLAYBACK 방법 숙달 상태 점검",
+    "titleEn": "Verify normal operation of VDR without alarms and ensure responsible officer's familiarity with playback procedures",
+    "slots": ["VDR ALARM", "PLAY BACK"],
+    "guideline": "VDR Alarm) It is normal for no alarms to be present. / Play back) Conduct the playback by referring to the maker's manual."
+  }
+]

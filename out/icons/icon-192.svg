@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192">
+  <rect width="192" height="192" rx="38" fill="#1e3a5f"/>
+  <g stroke="white" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <!-- 앵커 링 -->
+    <circle cx="96" cy="52" r="16" stroke-width="10"/>
+    <circle cx="96" cy="52" r="6" fill="white" stroke="none"/>
+    <!-- 수직 샤프트 -->
+    <line x1="96" y1="68" x2="96" y2="148" stroke-width="11"/>
+    <!-- 수평 크로스바 -->
+    <line x1="60" y1="88" x2="132" y2="88" stroke-width="11"/>
+    <!-- 왼쪽 플루크 -->
+    <path d="M 60 148 C 44 148 36 134 48 124" stroke-width="11"/>
+    <!-- 오른쪽 플루크 -->
+    <path d="M 132 148 C 148 148 156 134 144 124" stroke-width="11"/>
+  </g>
+</svg>

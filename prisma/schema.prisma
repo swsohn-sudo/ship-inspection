@@ -1,0 +1,65 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── 점검 세션 (헤더 정보) ─────────────────────────────────────
+model Inspection {
+  id             String             @id @default(cuid())
+  shipName       String
+  inspectionDate DateTime           @db.Date
+  inspector      String
+  status         InspectionStatus   @default(IN_PROGRESS)
+  userEmail      String
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  results        InspectionResult[]
+}
+
+enum InspectionStatus {
+  IN_PROGRESS
+  COMPLETED
+}
+
+// ─── 섹션 (마스터 데이터, seed 1회 입력) ─────────────────────────
+model Section {
+  id     String      @id @default(cuid())
+  no     Int         @unique
+  nameEn String
+  order  Int
+  items  CheckItem[]
+}
+
+// ─── 점검 항목 (마스터 데이터) ───────────────────────────────────
+model CheckItem {
+  id          String             @id @default(cuid())
+  itemNo      String
+  sectionId   String
+  section     Section            @relation(fields: [sectionId], references: [id])
+  description String
+  riskScore   Int                // 1~16 (UI 초기 버전에서는 hidden)
+  order       Int
+  results     InspectionResult[]
+
+  @@unique([sectionId, itemNo])
+}
+
+// ─── 항목별 점검 결과 ───────────────────────────────────────────
+model InspectionResult {
+  id           String     @id @default(cuid())
+  inspectionId String
+  inspection   Inspection @relation(fields: [inspectionId], references: [id], onDelete: Cascade)
+  itemId       String
+  item         CheckItem  @relation(fields: [itemId], references: [id])
+  // photo 있음 → NC(빨강) / 없음 → OK(연두)
+  photo        String?    @db.Text // base64 data URL (MVP) or storage URL
+  comments     String?    @db.Text
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@unique([inspectionId, itemId])
+}
