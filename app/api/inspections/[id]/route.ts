@@ -1,9 +1,9 @@
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/lib/auth';
 import { db } from '@/lib/firebase';
 import { FieldValue } from 'firebase-admin/firestore';
 
-// GET /api/inspections/[id] — 점검 상세 + 결과 목록
+// GET /api/inspections/[id] ???��? ?�세 + 결과 목록
 export async function GET(
   _req: Request,
   { params }: { params: { id: string } }
@@ -24,7 +24,7 @@ export async function GET(
   return Response.json({ id: doc.id, ...doc.data(), results });
 }
 
-// PATCH /api/inspections/[id] — 상태 업데이트 (status 필드만 허용)
+// PATCH /api/inspections/[id] ???�태 ?�데?�트 (status ?�드�??�용)
 export async function PATCH(
   req: Request,
   { params }: { params: { id: string } }

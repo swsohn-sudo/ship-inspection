@@ -1,10 +1,10 @@
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/lib/auth';
 import { db } from '@/lib/firebase';
 import { FieldValue } from 'firebase-admin/firestore';
 import { NextRequest } from 'next/server';
 
-// GET /api/inspections — 로그인 사용자의 점검 목록 (최근 30건)
+// GET /api/inspections ??로그???�용?�의 ?��? 목록 (최근 30�?
 export async function GET() {
   const session = await getServerSession(authOptions);
   if (!session?.user?.email)
@@ -26,7 +26,7 @@ export async function GET() {
       inspector:      data.inspector,
       status:         data.status,
       createdAt:      data.createdAt?.toDate().toISOString() ?? null,
-      // 대시보드 호환: NC 개수를 기존 _count.results 형식으로 반환
+      // ?�?�보???�환: NC 개수�?기존 _count.results ?�식?�로 반환
       _count: { results: data.ncCount ?? 0 },
     };
   });
@@ -34,7 +34,7 @@ export async function GET() {
   return Response.json(inspections);
 }
 
-// POST /api/inspections — 새 점검 생성
+// POST /api/inspections ?????��? ?�성
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.email)
@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
 
   const ref = await db.collection('inspections').add({
     shipName:       shipName.trim(),
-    inspectionDate, // YYYY-MM-DD 문자열 그대로 저장
+    inspectionDate, // YYYY-MM-DD 문자??그�?�??�??
     inspector:      inspector.trim(),
     status:         'IN_PROGRESS',
     userEmail:      session.user.email,

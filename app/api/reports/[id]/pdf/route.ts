@@ -1,11 +1,11 @@
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 
 /**
- * PDF 보고서 다운로드
- * TODO: 기존 lib/generatePdf.ts (html2canvas + jsPDF) 로직 서버사이드 이식
- *       또는 Puppeteer/Playwright 방식으로 변경
+ * PDF 보고???�운로드
+ * TODO: 기존 lib/generatePdf.ts (html2canvas + jsPDF) 로직 ?�버?�이???�식
+ *       ?�는 Puppeteer/Playwright 방식?�로 변�?
  */
 export async function GET(
   _req: Request,

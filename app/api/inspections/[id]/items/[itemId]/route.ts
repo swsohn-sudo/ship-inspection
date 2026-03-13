@@ -1,19 +1,19 @@
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/lib/auth';
 import { db } from '@/lib/firebase';
 import { FieldValue } from 'firebase-admin/firestore';
 import { MASTER_ITEM_MAP } from '@/lib/masterData';
 
-// 소유권 확인 헬퍼
+// ?�유�??�인 ?�퍼
 async function verifyOwnership(inspectionId: string, userEmail: string) {
   const doc = await db.collection('inspections').doc(inspectionId).get();
   if (!doc.exists || doc.data()?.userEmail !== userEmail) return null;
   return doc;
 }
 
-// PATCH: photo 또는 comments 저장 (upsert)
-// photo 있음 → NC / null → OK
-// ncCount 필드를 Firestore 트랜잭션으로 원자적 갱신
+// PATCH: photo ?�는 comments ?�??(upsert)
+// photo ?�음 ??NC / null ??OK
+// ncCount ?�드�?Firestore ?�랜??��?�로 ?�자??갱신
 export async function PATCH(
   req: Request,
   { params }: { params: { id: string; itemId: string } }
@@ -32,7 +32,7 @@ export async function PATCH(
   const inspRef  = db.collection('inspections').doc(params.id);
   const resultRef = inspRef.collection('results').doc(params.itemId);
 
-  // 마스터 데이터에서 sectionNo, sortOrder 조회 (정렬 보장)
+  // 마스???�이?�에??sectionNo, sortOrder 조회 (?�렬 보장)
   const master = MASTER_ITEM_MAP.get(params.itemId);
 
   await db.runTransaction(async (tx) => {
@@ -40,7 +40,7 @@ export async function PATCH(
     const hadPhoto = existing.exists ? Boolean(existing.data()?.photo) : false;
     const hasPhoto = Boolean(newPhoto);
 
-    // NC 카운트 증감
+    // NC 카운??증감
     const ncDelta = (!hadPhoto && hasPhoto) ? 1 : (hadPhoto && !hasPhoto) ? -1 : 0;
 
     tx.set(resultRef, {
@@ -65,7 +65,7 @@ export async function PATCH(
   return Response.json({ ok: true });
 }
 
-// DELETE: 결과 삭제 (항목을 OK 상태로 복원)
+// DELETE: 결과 ??�� (??��??OK ?�태�?복원)
 export async function DELETE(
   _req: Request,
   { params }: { params: { id: string; itemId: string } }

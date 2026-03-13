@@ -1,5 +1,5 @@
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/lib/auth';
 import { db } from '@/lib/firebase';
 import { MASTER_SECTIONS } from '@/lib/masterData';
 import { notFound, redirect } from 'next/navigation';
@@ -13,7 +13,7 @@ export default async function InspectionPage({
   const session = await getServerSession(authOptions);
   if (!session?.user?.email) redirect('/');
 
-  // 점검 세션 로드 (소유권 확인)
+  // ?��? ?�션 로드 (?�유�??�인)
   const docRef = db.collection('inspections').doc(params.id);
   const doc    = await docRef.get();
 
@@ -28,10 +28,10 @@ export default async function InspectionPage({
     status:         data.status,
   };
 
-  // 22개 섹션 + 325개 항목은 정적 마스터 데이터에서 직접 사용 (DB 조회 불필요)
+  // 22�??�션 + 325�???��?� ?�적 마스???�이?�에??직접 ?�용 (DB 조회 불필??
   const sections = MASTER_SECTIONS;
 
-  // 기존 점검 결과 로드 (Firestore 서브컬렉션)
+  // 기존 ?��? 결과 로드 (Firestore ?�브컬렉??
   const resultsSnap = await docRef.collection('results').get();
   const results = resultsSnap.docs.map((r) => {
     const d = r.data();
