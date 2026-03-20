@@ -13,6 +13,14 @@ export const authOptions: NextAuthOptions = {
     signIn: '/',
   },
   callbacks: {
+    async signIn({ user }) {
+      // @ekmtc.com 이메일만 로그인 허용
+      const email = user.email ?? '';
+      if (!email.endsWith('@ekmtc.com')) {
+        return false; // 로그인 차단
+      }
+      return true;
+    },
     async session({ session }) {
       return session;
     },
